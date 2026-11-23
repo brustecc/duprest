@@ -1,1 +1,161 @@
 @import "tailwindcss";
+
+/*
+ * Concepto: un informe de evaluación de riesgo impreso. Papel, tinta y un solo
+ * acento —la firma de DupreST— usado con avaricia. Sin cajas: la jerarquía sale
+ * de la tipografía, el aire y las reglas finas.
+ *
+ * Los ratios de contraste están medidos contra el papel, que es el único fondo
+ * con texto encima.
+ */
+@theme {
+  --color-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+
+  --color-papel: #f3f3ef;
+  --color-pliego: #eae8e1;
+  --color-tinta: #1b211e; /* 14,7:1 */
+  --color-tinta-suave: #4b534e; /* 7,1:1 */
+  /* El gris del preview (#8b918b) daba 2,9:1 y es el del disclaimer obligatorio. */
+  --color-nota: #646a65; /* 5,0:1 · 4,5:1 sobre el pliego */
+  --color-regla: #d5d4cc;
+  --color-regla-suave: #e2e1da;
+
+  --color-firma: #0d5247; /* 8,2:1 */
+  --color-alarma: #9e3a2c; /* 6,1:1 — sólo cifras de riesgo */
+
+  /* Los tres escenarios, de lo esperable a la cola de riesgo. */
+  --color-probable: #b5832f; /* 3,0:1 — sólo marcas y cifras grandes */
+  --color-probable-texto: #87662a; /* 4,8:1 */
+  --color-grave: #a85a34; /* 4,5:1 */
+  --color-catastrofico: #9e3a2c; /* 6,1:1 */
+
+  /*
+   * Categorías de la torta. Ninguna repite el tono de un escenario ni el de la
+   * firma, y el orden importa: es el que pasa el validador de daltonismo con la
+   * torta cerrada (el último sector toca al primero).
+   */
+  --color-parada: #823c66;
+  --color-reputacion: #7c8028;
+  --color-propiedad: #3082b5;
+  --color-multas: #29672e;
+  --color-respuesta: #917ec8;
+
+  /* Bandas de la matriz: el rojo óxido sobre el papel, en escalones parejos de luz. */
+  --color-banda-baja: #eee8e3;
+  --color-banda-media: #e2cec8;
+  --color-banda-alta: #d4b0a9;
+  --color-banda-critica: #c58f86;
+
+  --font-serif: var(--font-spectral), Georgia, "Times New Roman", serif;
+  --font-serif-italica: var(--font-spectral-italica), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-franklin), system-ui, sans-serif;
+
+  /* Escala de razón 1,2; los tamaños fluidos van de un escalón al siguiente. */
+  --text-mini: 0.694rem;
+  --text-chica: 0.833rem;
+  --text-media: 1.2rem;
+  --text-grande: 1.44rem;
+  --text-dato: clamp(1.44rem, 1.2rem + 1.2vw, 1.728rem);
+  --text-dato--line-height: 1.15;
+  --text-seccion: clamp(1.44rem, 1.1rem + 1.6vw, 2.074rem);
+  --text-seccion--line-height: 1.12;
+  --text-titular: clamp(2.074rem, 1.5rem + 3vw, 2.986rem);
+  --text-titular--line-height: 1.1;
+  --text-ratio: clamp(2.074rem, 1.4rem + 4vw, 3.583rem);
+  --text-ratio--line-height: 1;
+  --text-cifra: clamp(2.986rem, 1.8rem + 7vw, 5.16rem);
+  --text-cifra--line-height: 0.85;
+
+  --spacing-seccion: clamp(2.5rem, 1.6rem + 4vw, 4.25rem);
+  --container-informe: 56.25rem;
+
+  --ease-peso: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  --duracion-dato: 1.2s;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    background: var(--color-papel);
+  }
+
+  body {
+    line-height: 1.6;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-firma);
+    outline-offset: 2px;
+  }
+}
+
+/*
+ * Animación de los datos.
+ *
+ * El HTML trae siempre el estado final: torta dibujada, barras llenas, puntos
+ * en su lugar. `Revelar` marca `pendiente` sólo los bloques que arrancan fuera
+ * de la vista y los pasa a `listo` al entrar. Sin JS, con reduced-motion o en
+ * una captura, el dato está; la animación nunca puede dejarlo en blanco.
+ */
+[data-revelar="pendiente"] .torta-mascara {
+  stroke-dashoffset: var(--circunferencia);
+}
+[data-revelar="listo"] .torta-mascara {
+  transition: stroke-dashoffset calc(var(--duracion-dato) * 1.3) var(--ease-peso);
+}
+
+.barra {
+  transform-origin: left;
+}
+[data-revelar="pendiente"] .barra {
+  transform: scaleX(0);
+}
+[data-revelar="listo"] .barra {
+  transition: transform var(--duracion-dato) var(--ease-peso);
+}
+
+/* Son círculos porque son marcas de datos, no cajas: el radio cero es de la interfaz. */
+.punto {
+  border-radius: 50%;
+}
+[data-revelar="pendiente"] .marca {
+  opacity: 0;
+  transform: translateY(0.5rem);
+}
+[data-revelar="listo"] .marca {
+  transition:
+    opacity 0.5s ease-out,
+    transform 0.8s var(--ease-peso);
+  transition-delay: calc(var(--orden) * 220ms);
+}
+
+/*
+ * El count-up arranca recién al hidratar. Hasta entonces la cifra se esconde
+ * para que no se vea el salto del valor final a cero; si el JS nunca llega,
+ * aparece igual a los dos segundos y medio.
+ */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-cifra=""] {
+    visibility: hidden;
+    animation: mostrar-cifra 0s 2.5s forwards;
+  }
+}
+@keyframes mostrar-cifra {
+  to {
+    visibility: visible;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
