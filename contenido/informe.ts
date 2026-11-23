@@ -72,7 +72,7 @@ export const hallazgo = {
   titulo: "De un escaneo anónimo al control total, en minutos.",
   texto:
     "La falla es pública desde 2021 y se sigue explotando en internet. No hace falta robar una contraseña ni engañar a un empleado: alcanza con encontrar el servidor.",
-  tecnico: "Apache 2.4.49 · CVE-2021-41773 · CVSS 9,8",
+  tecnico: ["Apache 2.4.49", "CVE-2021-41773", "CVSS 9,8"],
   pasos: [
     { momento: "0 min", hecho: "Un escaneo automático detecta la versión desactualizada." },
     { momento: "2 min", hecho: "El atacante lee archivos internos del sistema." },
@@ -178,5 +178,5 @@ export const propuesta = {
 
 export const pie = {
   aviso: "Escenario ilustrativo basado en benchmarks de la industria. No representa datos reales de YPF.",
-  firma: "DupreST · Evaluación de ciberseguridad · CVE-2021-41773 · OWASP A06 y A05",
+  firma: ["DupreST", "Evaluación de ciberseguridad", "CVE-2021-41773", "OWASP A06 y A05"],
 };

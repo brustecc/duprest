@@ -87,7 +87,7 @@ export function Torta({ total, partes }: Props) {
         </p>
       </div>
 
-      <ul className="grid min-w-60 flex-1 gap-2.5">
+      <ul className="grid max-w-md min-w-60 flex-1 gap-2.5">
         {partes.map((parte) => (
           <li
             key={parte.id}

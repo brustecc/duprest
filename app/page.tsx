@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Barras } from "@/components/barras";
 import { Cifra } from "@/components/cifra";
 import { Matriz } from "@/components/matriz";
@@ -34,6 +35,16 @@ const tintaNivel: Record<Nivel, string> = {
   catastrofico: "text-catastrofico",
 };
 
+// Cada parte va entera: «CVE-2021-41773» partido en el guion no se lee.
+function Enumeracion({ partes }: { partes: string[] }) {
+  return partes.map((parte, i) => (
+    <Fragment key={parte}>
+      {i > 0 && " · "}
+      <span className="whitespace-nowrap">{parte}</span>
+    </Fragment>
+  ));
+}
+
 export default function Informe() {
   return (
     <>
@@ -52,7 +63,7 @@ export default function Informe() {
             ))}
           </dl>
 
-          <h1 className="mt-8 max-w-[19ch] font-serif text-titular font-semibold tracking-[-0.01em] text-balance">
+          <h1 className="mt-8 max-w-[22ch] font-serif text-titular font-semibold tracking-[-0.01em] text-balance">
             {portada.titular.antes}
             <em className="font-serif-italica font-semibold text-firma">{portada.titular.enfasis}</em>
             {portada.titular.despues}
@@ -107,7 +118,9 @@ export default function Informe() {
         <Seccion numero={2} rotulo={hallazgo.rotulo}>
           <h2 className={tituloSeccion}>{hallazgo.titulo}</h2>
           <p className="mt-3 max-w-[62ch] text-tinta-suave">{hallazgo.texto}</p>
-          <p className="mt-3 text-chica text-nota">{hallazgo.tecnico}</p>
+          <p className="mt-3 text-chica text-nota">
+            <Enumeracion partes={hallazgo.tecnico} />
+          </p>
           <ol className="mt-8 grid md:grid-cols-5">
             {hallazgo.pasos.map((paso, i) => (
               <li
@@ -203,7 +216,9 @@ export default function Informe() {
       <footer className="border-t border-regla py-7 text-chica">
         <div className={contenedor}>
           <p className="text-tinta-suave">{pie.aviso}</p>
-          <p className="mt-1.5 text-nota">{pie.firma}</p>
+          <p className="mt-1.5 text-nota">
+            <Enumeracion partes={pie.firma} />
+          </p>
         </div>
       </footer>
     </>
