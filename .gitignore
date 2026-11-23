@@ -54,3 +54,6 @@ next-env.d.ts
 PROYECTO.md
 CLAUDE.md
 AGENTS.md
+
+# originales pesados de imágenes: lo que se sirve es el webp de public/
+/assets-raw/
