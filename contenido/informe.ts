@@ -20,6 +20,12 @@ export type Escenario = {
   posicion: { probabilidad: number; impacto: number };
 };
 
+const datosPortada: Dato[] = [
+  { tipo: "cifra", valor: 9.8, decimales: 1, nota: "Severidad CVSS sobre 10: crítica" },
+  { tipo: "cifra", valor: 95, sufijo: " %", nota: "Menos riesgo con la mitigación" },
+  { tipo: "texto", texto: "1 servidor", nota: "La puerta a toda la red interna" },
+];
+
 export const portada = {
   marca: "DupreST",
   tipo: "Evaluación de riesgo de ciberseguridad",
@@ -40,11 +46,7 @@ export const portada = {
     sufijo: " M",
     nota: "de riesgo total modelado para el escenario auditado",
   },
-  datos: [
-    { tipo: "cifra", valor: 9.8, decimales: 1, nota: "Severidad CVSS sobre 10: crítica" },
-    { tipo: "cifra", valor: 95, sufijo: " %", nota: "Menos riesgo con la mitigación" },
-    { tipo: "texto", texto: "1 servidor", nota: "La puerta a toda la red interna" },
-  ] satisfies Dato[],
+  datos: datosPortada,
 };
 
 export const activo = {
