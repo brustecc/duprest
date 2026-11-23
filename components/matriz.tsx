@@ -90,7 +90,7 @@ export function Matriz({ niveles, probabilidad, impacto, bandas }: Props) {
           </p>
         </div>
         <figcaption>
-          <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-1.5 text-chica text-tinta-suave">
+          <ul className="mt-5 grid w-fit grid-cols-2 gap-x-6 gap-y-1.5 text-chica text-tinta-suave">
             {bandas.map((b) => (
               <li key={b.id} className="flex items-center gap-2">
                 <span aria-hidden className={`size-2.5 ${fondoBanda[b.id]}`} />

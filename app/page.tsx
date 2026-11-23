@@ -146,7 +146,7 @@ export default function Informe() {
                 <p className={`mb-2 text-mini font-semibold tracking-[0.12em] uppercase ${tintaNivel[nivel.id]}`}>
                   {nivel.rotulo}
                 </p>
-                <h3 className="font-serif text-media font-semibold">{nivel.titulo}</h3>
+                <h3 className="font-serif text-media leading-snug font-semibold">{nivel.titulo}</h3>
                 <p className="mt-2 mb-3.5 text-tinta-suave">{nivel.texto}</p>
                 <p className={`font-serif text-grande font-bold tabular-nums ${tintaNivel[nivel.id]}`}>{nivel.monto}</p>
                 <p className="mt-0.5 text-chica text-nota">{nivel.probabilidad}</p>
@@ -156,7 +156,7 @@ export default function Informe() {
 
           <div className="mt-14 grid items-start gap-x-14 gap-y-8 md:grid-cols-[0.9fr_1.1fr]">
             <div>
-              <h3 className="font-serif text-grande font-semibold">{escenarios.matriz.titulo}</h3>
+              <h3 className="font-serif text-grande leading-snug font-semibold">{escenarios.matriz.titulo}</h3>
               <p className="mt-3 max-w-[50ch] text-tinta-suave">{escenarios.matriz.texto}</p>
             </div>
             <Matriz
@@ -207,7 +207,7 @@ export default function Informe() {
             ))}
           </ul>
           <div className="mt-9 flex flex-wrap items-baseline justify-between gap-5 border-t-[1.5px] border-tinta pt-6">
-            <p className="max-w-[34ch] font-serif text-grande">{propuesta.cierre}</p>
+            <p className="max-w-[34ch] font-serif text-grande leading-snug">{propuesta.cierre}</p>
             <p className="font-semibold text-firma">{propuesta.llamado}</p>
           </div>
         </Seccion>
