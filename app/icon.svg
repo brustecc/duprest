@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" fill="#0d5247"/>
-  <text x="16" y="24" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="23" font-weight="700" fill="#f3f3ef">D</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <rect width="48" height="48" fill="#0d5247"/>
+  <g transform="translate(11.5 11) scale(0.74) translate(-8 -6)">
+    <path fill="#f3f3ef" fill-rule="evenodd" d="M8 6h16a18 18 0 0 1 0 36H8zM24 14.5a5.5 5.5 0 0 0-3 10.1L19 33h10l-2-8.4a5.5 5.5 0 0 0-3-10.1z"/>
+  </g>
 </svg>

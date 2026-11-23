@@ -1,9 +1,14 @@
 "use client";
 
+import { Logo } from "@/components/logo";
+
 export default function ErrorInforme({ retry }: { error: unknown; retry: () => void }) {
   return (
     <main className="mx-auto max-w-informe px-6 py-seccion">
-      <p className="border-b-[1.5px] border-tinta pb-3.5 font-serif text-media font-bold">DupreST</p>
+      <p className="flex items-center gap-2.5 border-b-[1.5px] border-tinta pb-3.5 font-serif text-media font-bold">
+        <Logo className="h-7 w-auto text-firma" />
+        DupreST
+      </p>
       <h1 className="mt-10 font-serif text-titular font-semibold text-balance">
         El informe no se pudo mostrar.
       </h1>

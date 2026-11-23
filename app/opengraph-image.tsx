@@ -49,7 +49,17 @@ export default function ImagenOG() {
             borderBottom: `3px solid ${tinta}`,
           }}
         >
-          <span style={{ fontFamily: "Spectral", fontSize: 44 }}>{portada.marca}</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            {/* El mismo trazado que components/logo.tsx. */}
+            <svg width={40} height={42} viewBox="8 6 34 36">
+              <path
+                fill={firma}
+                fillRule="evenodd"
+                d="M8 6h16a18 18 0 0 1 0 36H8zM24 14.5a5.5 5.5 0 0 0-3 10.1L19 33h10l-2-8.4a5.5 5.5 0 0 0-3-10.1z"
+              />
+            </svg>
+            <span style={{ fontFamily: "Spectral", fontSize: 44 }}>{portada.marca}</span>
+          </div>
           {/* Satori no alinea por línea base: el margen compensa la diferencia de descendentes. */}
           <span
             style={{
