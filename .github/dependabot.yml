@@ -1,0 +1,17 @@
+version: 2
+
+# Un PR por semana con todo junto, en vez de uno por paquete: para un sitio
+# chico, revisar de a uno es más ruido que control.
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      dependencias:
+        patterns: ["*"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
