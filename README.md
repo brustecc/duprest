@@ -1,34 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DupreST · Evaluación de riesgo para YPF
 
-## Getting Started
+Landing de una sola página: DupreST, una consultora de ciberseguridad ficticia,
+le presenta a YPF el riesgo de un servidor sin parchear y lo que cuesta evitarlo.
+Es un pitch ejecutivo pensado para un CEO: poco texto, una cifra principal y tres
+gráficos (matriz de riesgo, torta de impacto y barras de prevención contra
+incidente).
 
-First, run the development server:
+Trabajo práctico final del curso de Ciberseguridad de la Fundación YPF
+(Comisión 1 · Grupo 4).
+
+> **Los números son ilustrativos.** Están basados en benchmarks de la industria y
+> no representan datos reales de YPF. La página lo dice al pie, y un test verifica
+> que el aviso esté a la vista.
+
+![Portada del informe](.github/captura.jpg)
+
+## Stack
+
+- Next.js 16 (App Router) con TypeScript estricto y Tailwind CSS 4.
+- Contenido estático y tipado en `contenido/informe.ts`: no hay base de datos ni
+  backend.
+- Gráficos en SVG y CSS hechos a mano y renderizados en el servidor. El HTML trae
+  el estado final; la animación es una capa encima.
+- Playwright con axe para accesibilidad (WCAG 2.1 AA).
+
+## Cómo se corre
+
+Requiere Node 24.
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Queda andando en http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Verificación
 
-## Learn More
+Lo mismo que corre el CI en cada push:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run typecheck && npm run lint && npm run build && npx playwright test
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Los tests corren contra el build de producción. La primera vez hace falta
+`npx playwright install chromium`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Estructura
 
-## Deploy on Vercel
+```
+app/          la página, el layout, la imagen OG, robots, sitemap y el 404
+components/   encabezado de sección, torta, matriz, barras, y la cifra y el
+              revelado, que son las dos únicas piezas de cliente
+contenido/    todos los textos y números del informe
+lib/          la URL canónica y las fuentes de la imagen OG
+tests/        accesibilidad y el aviso de datos ilustrativos
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deploy
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Está pensado para Vercel: se importa el repo y no hace falta cargar variables.
+La URL canónica sale sola de `VERCEL_PROJECT_PRODUCTION_URL`; con un dominio
+propio, se define `NEXT_PUBLIC_SITE_URL`.
+
+## Licencias de las fuentes
+
+Spectral y Libre Franklin se distribuyen bajo la SIL Open Font License. Los
+textos de licencia de las copias que usa la imagen OG están en `lib/fuentes-og/`.
