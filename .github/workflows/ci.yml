@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Un push nuevo cancela la corrida anterior de la misma rama: no tiene sentido
+# esperar el resultado de un commit que ya quedó viejo.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # Primero los tipos: es el paso más rápido y el que da el error más claro.
+      - name: Tipos
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      # Las reglas del sistema visual, verificadas como código y no como
+      # intención. Los puntos de la matriz son círculos con CSS propio
+      # (`.punto`), no con utilidades: son marcas de datos, no interfaz.
+      - name: Sin radio ni sombras
+        run: |
+          if grep -rnE "\b(rounded|shadow)-" --include="*.tsx" app components; then
+            echo "::error::Apareció un rounded- o un shadow-. El informe no tiene cajas: la jerarquía sale de reglas finas."
+            exit 1
+          fi
+          echo "Sin curvas ni sombras."
+
+      - name: Sin las fuentes de plantilla
+        run: |
+          if grep -rnE "\b(Inter|Space_Grotesk|Space Grotesk)\b" --include="*.ts" --include="*.tsx" --include="*.css" app components lib; then
+            echo "::error::Apareció una fuente que delata una plantilla. El informe es Spectral + Libre Franklin."
+            exit 1
+          fi
+          echo "Spectral + Libre Franklin."
+
+      - name: Navegador para los tests
+        run: npx playwright install --with-deps chromium
+
+      # Incluye el test que exige el aviso de datos ilustrativos a la vista.
+      - name: Tests
+        run: npx playwright test
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: reporte-playwright
+          path: playwright-report/
+          retention-days: 7
