@@ -63,6 +63,8 @@
   --text-seccion--line-height: 1.12;
   --text-titular: clamp(2.074rem, 1.5rem + 3vw, 2.986rem);
   --text-titular--line-height: 1.1;
+  --text-tapa: clamp(2.488rem, 1.6rem + 3.6vw, 3.583rem);
+  --text-tapa--line-height: 1.05;
   --text-ratio: clamp(2.074rem, 1.4rem + 4vw, 3.583rem);
   --text-ratio--line-height: 1;
   --text-cifra: clamp(2.986rem, 1.8rem + 7vw, 5.16rem);
@@ -92,6 +94,54 @@
     outline: 2px solid var(--color-firma);
     outline-offset: 2px;
   }
+}
+
+/*
+ * Páginas en negativo, como las de color de un informe impreso: la tapa y el
+ * capítulo del ataque en tinta, la contratapa en el verde de la firma.
+ *
+ * En vez de duplicar componentes, cada página redefine los mismos tokens:
+ * adentro, «papel» es el fondo y «tinta» el texto, aunque el fondo sea oscuro.
+ * Los ratios están medidos contra el fondo de cada página.
+ */
+.negativo {
+  --color-papel: #1b211e;
+  --color-tinta: #f3f3ef; /* 14,7:1 */
+  --color-tinta-suave: #c3c9c5; /* 9,7:1 */
+  --color-nota: #9aa19c; /* 6,2:1 */
+  --color-regla: #3d4642;
+  --color-regla-suave: #2e3632;
+  --color-firma: #7cc0ae; /* 7,8:1 */
+  --color-alarma: #e8866d; /* 6,3:1 */
+  background-color: var(--color-papel);
+  color: var(--color-tinta);
+}
+
+.contratapa {
+  --color-papel: #0d5247;
+  --color-tinta: #f3f3ef; /* 8,2:1 */
+  --color-tinta-suave: #d2e2dd; /* 6,8:1 */
+  --color-nota: #b3cdc6; /* 5,4:1 */
+  --color-regla: #3b7468;
+  --color-firma: #f3f3ef;
+  background-color: var(--color-papel);
+  color: var(--color-tinta);
+}
+
+/*
+ * El velo de la tapa es la tinta de la página sobre la foto. Es más denso
+ * arriba, donde va el encabezado, y sobre todo abajo, donde va el titular:
+ * con 85 % de tinta, el texto papel da 9,2:1 aunque debajo haya un blanco puro.
+ */
+.velo {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-papel) 80%, transparent) 0%,
+    color-mix(in srgb, var(--color-papel) 35%, transparent) 26%,
+    color-mix(in srgb, var(--color-papel) 40%, transparent) 42%,
+    color-mix(in srgb, var(--color-papel) 88%, transparent) 70%,
+    color-mix(in srgb, var(--color-papel) 95%, transparent) 100%
+  );
 }
 
 /*

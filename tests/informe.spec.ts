@@ -10,11 +10,11 @@ test.describe("sin JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 
   // El count-up es una capa encima: el dato tiene que estar aunque el script no llegue.
-  test("las cifras de la portada llegan completas en el HTML", async ({ page }) => {
+  test("las cifras del resumen llegan completas en el HTML", async ({ page }) => {
     await page.goto("/");
-    const portada = page.locator("header");
+    const resumen = page.locator("#resumen");
     for (const cifra of ["US$ 25 M", "9,8", "95 %"]) {
-      await expect(portada.getByText(cifra, { exact: true })).toBeVisible();
+      await expect(resumen.getByText(cifra, { exact: true })).toBeVisible();
     }
   });
 });

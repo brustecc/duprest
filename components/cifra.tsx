@@ -33,26 +33,45 @@ export function Cifra({ valor, decimales = 0, prefijo = "", sufijo = "" }: Props
     // Con reduced-motion la cifra nunca se escondió: se queda como está.
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    // Dos tiempos: se pone en cero un poco antes de entrar en la vista, para
+    // que nadie vea el salto del valor final a cero, y cuenta recién al entrar.
     let cuadro = 0;
-    const observador = new IntersectionObserver(
+    let lista = false;
+    const preparar = () => {
+      if (lista) return;
+      lista = true;
+      setMostrado(0);
+      cifra.dataset.cifra = "lista";
+    };
+    const previo = new IntersectionObserver(
       ([entrada]) => {
         if (!entrada.isIntersecting) return;
-        observador.disconnect();
+        previo.disconnect();
+        preparar();
+      },
+      { rootMargin: "0px 0px 40% 0px" },
+    );
+    const visible = new IntersectionObserver(
+      ([entrada]) => {
+        if (!entrada.isIntersecting) return;
+        visible.disconnect();
+        previo.disconnect();
+        preparar();
         const inicio = performance.now();
         const avanzar = (ahora: number) => {
           const avance = Math.min((ahora - inicio) / DURACION, 1);
           setMostrado(valor * (1 - (1 - avance) ** 3));
           if (avance < 1) cuadro = requestAnimationFrame(avanzar);
         };
-        setMostrado(0);
-        cifra.dataset.cifra = "lista";
         cuadro = requestAnimationFrame(avanzar);
       },
-      { threshold: 0.4 },
+      { rootMargin: "0px 0px -15% 0px" },
     );
-    observador.observe(cifra);
+    previo.observe(cifra);
+    visible.observe(cifra);
     return () => {
-      observador.disconnect();
+      previo.disconnect();
+      visible.disconnect();
       cancelAnimationFrame(cuadro);
     };
   }, [valor]);

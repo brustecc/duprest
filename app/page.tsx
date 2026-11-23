@@ -1,6 +1,8 @@
+import Image from "next/image";
 import { Fragment } from "react";
 import { Barras } from "@/components/barras";
 import { Cifra } from "@/components/cifra";
+import { Logo } from "@/components/logo";
 import { Matriz } from "@/components/matriz";
 import { Seccion } from "@/components/seccion";
 import { Torta } from "@/components/torta";
@@ -48,53 +50,84 @@ function Enumeracion({ partes }: { partes: string[] }) {
 export default function Informe() {
   return (
     <>
-      <header className="pt-[clamp(1.875rem,1.4rem+2.4vw,3rem)] pb-seccion">
-        <div className={contenedor}>
-          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b-[1.5px] border-tinta pb-3.5">
-            <span className="font-serif text-media font-bold">{portada.marca}</span>
+      <header className="negativo relative isolate flex min-h-[88svh] flex-col">
+        {/* La foto es ambiente: todo lo que dice la tapa está en el texto. */}
+        <Image
+          src="/tapa.webp"
+          alt=""
+          fill
+          preload
+          sizes="100vw"
+          className="-z-20 object-cover object-[50%_35%]"
+        />
+        <div aria-hidden className="velo absolute inset-0 -z-10" />
+
+        <div
+          className={`${contenedor} flex flex-1 flex-col pt-[clamp(1.875rem,1.4rem+2.4vw,3rem)] pb-[clamp(2.5rem,1.6rem+4vw,4.5rem)]`}
+        >
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b-[1.5px] border-tinta pb-3.5">
+            <span className="flex items-center gap-2.5">
+              <Logo className="h-7 w-auto" />
+              <span className="font-serif text-media font-bold">{portada.marca}</span>
+            </span>
             <span className="text-mini tracking-[0.12em] text-tinta-suave uppercase">{portada.tipo}</span>
           </div>
-          <dl className="mt-3 flex flex-wrap gap-x-6 gap-y-1 text-chica text-nota">
-            {portada.ficha.map((f) => (
-              <div key={f.rotulo} className="flex gap-1.5">
-                <dt className="font-semibold text-tinta-suave">{f.rotulo}</dt>
-                <dd>{f.valor}</dd>
-              </div>
-            ))}
-          </dl>
 
-          <h1 className="mt-8 max-w-[22ch] font-serif text-titular font-semibold tracking-[-0.01em] text-balance">
-            {portada.titular.antes}
-            <em className="font-serif-italica font-semibold text-firma">{portada.titular.enfasis}</em>
-            {portada.titular.despues}
-          </h1>
-          <p className="mt-4 max-w-[60ch] text-tinta-suave sm:text-media">{portada.bajada}</p>
-
-          <div className="mt-10 flex flex-wrap items-end gap-x-5 gap-y-3 border-t border-regla pt-6">
-            <p className="font-serif text-cifra font-bold tracking-[-0.02em] whitespace-nowrap text-alarma tabular-nums">
-              <Cifra valor={portada.cifra.valor} prefijo={portada.cifra.prefijo} sufijo={portada.cifra.sufijo} />
-            </p>
-            <p className="max-w-[24ch] pb-2 text-tinta-suave">{portada.cifra.nota}</p>
+          <div className="mt-auto pt-20">
+            <dl className="flex flex-wrap gap-x-6 gap-y-1 text-chica text-tinta-suave">
+              {portada.ficha.map((f) => (
+                <div key={f.rotulo} className="flex gap-1.5">
+                  <dt className="font-semibold text-tinta">{f.rotulo}</dt>
+                  <dd>{f.valor}</dd>
+                </div>
+              ))}
+            </dl>
+            <h1 className="mt-4 max-w-[20ch] font-serif text-tapa font-semibold tracking-[-0.01em] text-balance">
+              {portada.titular.antes}
+              <em className="font-serif-italica font-semibold text-firma">{portada.titular.enfasis}</em>
+              {portada.titular.despues}
+            </h1>
           </div>
-
-          <ul className="mt-7 grid sm:grid-cols-3">
-            {portada.datos.map((dato) => (
-              <li key={dato.nota} className={filaDato}>
-                <p className="font-serif text-dato font-semibold tabular-nums">
-                  {dato.tipo === "cifra" ? (
-                    <Cifra valor={dato.valor} decimales={dato.decimales} prefijo={dato.prefijo} sufijo={dato.sufijo} />
-                  ) : (
-                    dato.texto
-                  )}
-                </p>
-                <p className="mt-0.5 text-chica text-tinta-suave">{dato.nota}</p>
-              </li>
-            ))}
-          </ul>
         </div>
       </header>
 
       <main>
+        <section id="resumen" className="py-seccion">
+          <div className={contenedor}>
+            <p className="mb-3 text-mini font-semibold tracking-[0.14em] text-tinta-suave uppercase">
+              {portada.rotuloResumen}
+            </p>
+            <p className="max-w-[60ch] text-tinta-suave sm:text-media">{portada.bajada}</p>
+
+            <div className="mt-10 flex flex-wrap items-end gap-x-5 gap-y-3 border-t border-regla pt-6">
+              <p className="font-serif text-cifra font-bold tracking-[-0.02em] whitespace-nowrap text-alarma tabular-nums">
+                <Cifra valor={portada.cifra.valor} prefijo={portada.cifra.prefijo} sufijo={portada.cifra.sufijo} />
+              </p>
+              <p className="max-w-[24ch] pb-2 text-tinta-suave">{portada.cifra.nota}</p>
+            </div>
+
+            <ul className="mt-7 grid sm:grid-cols-3">
+              {portada.datos.map((dato) => (
+                <li key={dato.nota} className={filaDato}>
+                  <p className="font-serif text-dato font-semibold tabular-nums">
+                    {dato.tipo === "cifra" ? (
+                      <Cifra
+                        valor={dato.valor}
+                        decimales={dato.decimales}
+                        prefijo={dato.prefijo}
+                        sufijo={dato.sufijo}
+                      />
+                    ) : (
+                      dato.texto
+                    )}
+                  </p>
+                  <p className="mt-0.5 text-chica text-tinta-suave">{dato.nota}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
         <Seccion numero={1} rotulo={activo.rotulo}>
           <div className="grid items-start gap-x-14 gap-y-8 md:grid-cols-[1.05fr_0.95fr]">
             <div>
@@ -115,7 +148,7 @@ export default function Informe() {
           </div>
         </Seccion>
 
-        <Seccion numero={2} rotulo={hallazgo.rotulo}>
+        <Seccion numero={2} rotulo={hallazgo.rotulo} className="negativo">
           <h2 className={tituloSeccion}>{hallazgo.titulo}</h2>
           <p className="mt-3 max-w-[62ch] text-tinta-suave">{hallazgo.texto}</p>
           <p className="mt-3 text-chica text-nota">
@@ -206,18 +239,36 @@ export default function Informe() {
               </li>
             ))}
           </ul>
-          <div className="mt-9 flex flex-wrap items-baseline justify-between gap-5 border-t-[1.5px] border-tinta pt-6">
-            <p className="max-w-[34ch] font-serif text-grande leading-snug">{propuesta.cierre}</p>
-            <p className="font-semibold text-firma">{propuesta.llamado}</p>
-          </div>
         </Seccion>
+
+        <section className="contratapa py-seccion">
+          <div className={contenedor}>
+            <p className="flex items-center gap-3">
+              <Logo className="h-9 w-auto" />
+              <span className="font-serif text-grande font-bold">{portada.marca}</span>
+            </p>
+            <p className="mt-10 max-w-[26ch] font-serif text-titular text-balance">{propuesta.cierre}</p>
+            <p className="mt-6 text-media font-semibold">{propuesta.llamado}</p>
+          </div>
+        </section>
       </main>
 
-      <footer className="border-t border-regla py-7 text-chica">
+      <footer className="contratapa border-t border-regla py-7 text-chica">
         <div className={contenedor}>
           <p className="text-tinta-suave">{pie.aviso}</p>
           <p className="mt-1.5 text-nota">
             <Enumeracion partes={pie.firma} />
+          </p>
+          <p className="mt-1.5 text-nota">
+            Foto de tapa:{" "}
+            <a href={pie.foto.perfil} className="underline underline-offset-2">
+              {pie.foto.autor}
+            </a>{" "}
+            en{" "}
+            <a href={pie.foto.sitio} className="underline underline-offset-2">
+              {pie.foto.banco}
+            </a>
+            .
           </p>
         </div>
       </footer>

@@ -38,6 +38,7 @@ export const portada = {
     enfasis: "en juego",
     despues: ".",
   },
+  rotuloResumen: "Resumen ejecutivo",
   bajada:
     "Auditamos el portal interno de gestión y telemetría de las instalaciones de campo. Encontramos una vía por la que un atacante, sin usuario ni contraseña, toma control total del servidor desde internet.",
   cifra: {
@@ -179,4 +180,11 @@ export const propuesta = {
 export const pie = {
   aviso: "Escenario ilustrativo basado en benchmarks de la industria. No representa datos reales de YPF.",
   firma: ["DupreST", "Evaluación de ciberseguridad", "CVE-2021-41773", "OWASP A06 y A05"],
+  // La licencia de Unsplash no exige el crédito, pero lo pide y corresponde darlo.
+  foto: {
+    autor: "Jacob Padilla",
+    perfil: "https://unsplash.com/@jacob17pad",
+    banco: "Unsplash",
+    sitio: "https://unsplash.com",
+  },
 };
