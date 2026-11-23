@@ -50,10 +50,13 @@ Los tests corren contra el build de producción. La primera vez hace falta
 
 ```
 app/          la página, el layout, la imagen OG, robots, sitemap y el 404
-components/   encabezado de sección, torta, matriz, barras, y la cifra y el
-              revelado, que son las dos únicas piezas de cliente
+components/   logo, encabezado de sección, torta, matriz, barras, y la cifra y
+              el revelado, que son las dos únicas piezas de cliente
 contenido/    todos los textos y números del informe
 lib/          la URL canónica y las fuentes de la imagen OG
+public/       la foto de tapa, ya optimizada
+scripts/      optimize-assets: pasa los originales de assets-raw/ a webp en
+              blanco y negro (`npm run assets`)
 tests/        accesibilidad y el aviso de datos ilustrativos
 ```
 
@@ -63,7 +66,10 @@ Está pensado para Vercel: se importa el repo y no hace falta cargar variables.
 La URL canónica sale sola de `VERCEL_PROJECT_PRODUCTION_URL`; con un dominio
 propio, se define `NEXT_PUBLIC_SITE_URL`.
 
-## Licencias de las fuentes
+## Licencias
 
-Spectral y Libre Franklin se distribuyen bajo la SIL Open Font License. Los
-textos de licencia de las copias que usa la imagen OG están en `lib/fuentes-og/`.
+- Spectral y Libre Franklin se distribuyen bajo la SIL Open Font License. Los
+  textos de licencia de las copias que usa la imagen OG están en
+  `lib/fuentes-og/`.
+- La foto de tapa es de [Jacob Padilla](https://unsplash.com/@jacob17pad) en
+  [Unsplash](https://unsplash.com), bajo la licencia de Unsplash.
